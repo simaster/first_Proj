@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enterprise {
+  id          String   @id @default(uuid())
+  name        String
+  code        String   @unique
+  address     String?
+  contact     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  machines    Machine[]
+}
+
+model Machine {
+  id           String        @id @default(uuid())
+  name         String
+  code         String        @unique
+  enterpriseId String
+  enterprise   Enterprise    @relation(fields: [enterpriseId], references: [id])
+  status       MachineStatus @default(OFFLINE)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  monitoringData MonitoringData[]
+}
+
+model MonitoringData {
+  id          String   @id @default(uuid())
+  machineId   String
+  machine     Machine  @relation(fields: [machineId], references: [id])
+  temperature Float
+  pressure    Float
+  cycleTime   Int
+  timestamp   DateTime @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum MachineStatus {
+  ONLINE
+  OFFLINE
+  MAINTENANCE
+}
