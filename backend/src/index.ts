@@ -1,8 +1,8 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
 import { connectDatabase, disconnectDatabase } from './config/database';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { generalLimiter } from './middleware/rateLimit';
@@ -10,8 +10,6 @@ import authRoutes from './routes/authRoutes';
 import enterpriseRoutes from './routes/enterpriseRoutes';
 import machineRoutes from './routes/machineRoutes';
 import monitoringRoutes from './routes/monitoringRoutes';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
