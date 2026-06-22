@@ -56,6 +56,10 @@ async function main() {
 
   console.log('Created machine:', machine);
 
+  await prisma.monitoringData.deleteMany({
+    where: { machineId: machine.id },
+  });
+
   // Create sample monitoring data
   const monitoringData = await prisma.monitoringData.create({
     data: {
